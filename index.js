@@ -1,7 +1,9 @@
 const express = require("express")
 const app = express()
 const data = require("./data/employeesData.json")
+const cors = require("cors")
 
+app.use(cors())
 const port = process.env.PORT || 8000
 
 app.get("/employee", (request, response) => {
