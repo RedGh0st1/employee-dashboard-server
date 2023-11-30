@@ -3,17 +3,24 @@ const app = express()
 const data = require("./data/employeesData.json")
 const cors = require("cors")
 const bodyParser = require("body-parser")
+const employeeController = require("./employeeController/employeeController")
+const pgp = require("pg-promise")()
+const db = pgp("postgres://lennienurse:1291@localhost/employee_dashboard")
+console.log(db)
+db.query("CREATE TABLE IF NOT EXISTS Grades();")
+
+//db.any
+//db.many
+//db.OneOrNone
+//db.manyOrNone
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cors())
 const port = process.env.PORT || 8000
 
-app.get("/employee", (request, response) => {
-  response.send({ employees: data.employees })
-})
+app.use("/employee", employeeController)
 
 app.get("/employee/:id", (request, response) => {
-  //   const { id } = req.params.id
   const employeeId = data.employees.find(
     (employee) => employee.id === request.params.id
   )
@@ -32,6 +39,10 @@ app.post("/employee", (request, response) => {
 
 app.put("/employee/:id", (request, response) => {
   console.log("PUT RECEIVED")
+})
+
+app.get("/", (request, response) => {
+  response.status(200).json({ data: "Server is running !!!" })
 })
 
 app.listen(port, () => {
