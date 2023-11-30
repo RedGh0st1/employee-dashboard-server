@@ -30,6 +30,10 @@ app.post("/employee", (request, response) => {
   //   response.send({ message: "Employee added" })
 })
 
+app.put("/employee/:id", (request, response) => {
+  console.log("PUT RECEIVED")
+})
+
 app.listen(port, () => {
   console.log(`Employee Dashboard server running on port: ${port}`)
 })
