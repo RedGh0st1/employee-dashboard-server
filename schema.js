@@ -1,6 +1,6 @@
 console.log("Running schema file....")
 const pgp = require("pg-promise")()
-const { exit } = require("node:process")
+const {exit} = require("node:process")
 const db = pgp("postgres://lennienurse:1291@localhost/employee_dashboard")
 ;(async function () {
   await db.query("DROP TABLE IF EXISTS grades")
