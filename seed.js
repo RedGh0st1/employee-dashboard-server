@@ -12,7 +12,7 @@ async function seed() {
       company.name(),
       internet.email(),
       internet.avatar(),
-      "coding",
+      "javascript",
     ]
     await db.none(
       `INSERT INTO employee (first_name, last_name, city, company, email, pic, skill) VALUES($1, $2, $3, $4, $5, $6, $7)`,
