@@ -18,15 +18,15 @@ router.get("/", (request, response) => {
 //db.OneOrNone
 // its not reading request.params.id as a number error: invalid input syntax for type integer: ":id"
 router.get("/:id", (request, response) => {
-  db.oneOrNone("SELECT * FROM employee WHERE id = $1", [
-    +request.params.id,
-  ]).then((data) => {
-    if (data) {
-      response.send({ employee: data });
-    } else {
-      response.status(404).send({ message: "Employee not found" });
+  db.oneOrNone("SELECT * FROM employee WHERE id=$1", [+request.params.id]).then(
+    (data) => {
+      if (data) {
+        response.send({ employee: data });
+      } else {
+        response.status(404).send({ message: "Employee not found" });
+      }
     }
-  });
+  );
 });
 
 //db.Many Or None
@@ -41,7 +41,7 @@ router.post("/", (request, response) => {
   });
 });
 
-router.put("/employee/:id", (request, response) => {
+router.put("/:id", (request, response) => {
   const { first_name, last_name, city, company, email, pic, skill } =
     request.body;
   const value = [
@@ -61,6 +61,12 @@ router.put("/employee/:id", (request, response) => {
   });
 });
 
-router.delete("/employee/:id", (request, response) => {});
+//none
+router.delete("/:id", (request, response) => {
+  const query = ("DELETE FROM employee WHERE id = $1", [+request.params.id]);
+  db.none(query).then(() => {
+    return response.send({ message: "Employee deleted successfully" });
+  });
+});
 
 module.exports = router;
