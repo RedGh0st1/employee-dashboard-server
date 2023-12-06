@@ -1,12 +1,11 @@
+const bodyParser = require("body-parser");
 const express = require("express");
 // const data = require("./data/employeesData.json")
 const pgp = require("pg-promise")();
 const db = pgp("postgres://lennienurse:1291@localhost/employee_dashboard");
 const router = express.Router();
-//db.any
-//db.many
 
-//db.manyOrNone
+router.use(bodyParser.json());
 
 //result
 router.get("/", (request, response) => {
@@ -16,9 +15,9 @@ router.get("/", (request, response) => {
 });
 
 //db.OneOrNone
-// its not reading request.params.id as a number error: invalid input syntax for type integer: ":id"
+// its not reading request.params.id as a number error: invalid input syntax for type integer: ":id"  this happen because of the body-parser
 router.get("/:id", (request, response) => {
-  db.oneOrNone("SELECT * FROM employee WHERE id=$1", [+request.params.id]).then(
+  db.oneOrNone("SELECT * FROM employee WHERE id=$1", [request.params.id]).then(
     (data) => {
       if (data) {
         response.send({ employee: data });
@@ -63,7 +62,7 @@ router.put("/:id", (request, response) => {
 
 //none
 router.delete("/:id", (request, response) => {
-  const query = ("DELETE FROM employee WHERE id = $1", [+request.params.id]);
+  const query = ("DELETE FROM employee WHERE id = $1", [request.params.id]);
   db.none(query).then(() => {
     return response.send({ message: "Employee deleted successfully" });
   });
